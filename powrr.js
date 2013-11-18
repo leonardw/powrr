@@ -1,14 +1,17 @@
-var primes = require('./prime')(0,100);
 
+var PRIMES = require('./prime')(0,100),
+	_rota = [],
+	_cursor = -1;
+	_jobs = [];
 
-function wrr(weights) {
+function normaliseWeights(weights) {
 	var ws = weights.slice(0); //shallow clone
 
 	var factors = [];
 	var allDone = false;
 	var zeroCount = 0, iteration = 0;
-	for (var i=0, psz=primes.length; i<psz; i++) {
-		var p = primes[i];
+	for (var i=0, psz=PRIMES.length; i<psz; i++) {
+		var p = PRIMES[i];
 		
 		var allDivisible;
 		do {
@@ -65,22 +68,33 @@ function wrr(weights) {
 	for (var i=0; i<weights.length; i++) {
 		var norm = weights[i]/gcf;
 		ws[i] = norm;
-		total += norm;
+		total += norm; //TODO: not needed here
 	}
 	console.log('original  :', weights);
 	console.log('normalised:', ws);
 	console.log('total', total);
+	
+	return ws;
+}
 
-
-	for (var i=0; i<ws.length; i++) {
-//		ws[i] = [ws[i], total/ws[i], i];
-		ws[i] = [ws[i], i, 0];
+function add(jobs) {
+	var weights = [];
+	for (var i=0, imax=jobs.length; i<imax; i++) {
+		weights.push(jobs[i].weight);
+	}
+	var ws = normaliseWeights(weights);
+	
+	var total = 0;
+	for (var i=0, imax=ws.length; i<imax; i++) {
+		total += ws[i];
+		ws[i] = [ws[i], jobs[i], 0];
 	}
 	ws.sort(function(a,b){
 		return b[0]-a[0];
 	});
 	console.log('sorted:', ws);
-
+	console.log('total', total);
+	
 	var rota = [];
 	//total = ws[0][0];
 	console.log('total', total);
@@ -101,8 +115,15 @@ function wrr(weights) {
 	}
 	console.log('rota:', rota);
 	
-	return rota;
+	_jobs = jobs;
+	_rota = rota;
+}
+
+function next() {
+	_cursor = (_cursor + 1) % _rota.length;
+	return _rota[_cursor][1].meta; //TODO change [1]
 }
 
 
-exports.wrr = wrr;
+exports.add = add;
+exports.next = next;
