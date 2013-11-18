@@ -1,0 +1,21 @@
+{
+  "name": "powrr",
+  "version": "0.0.1",
+  "description": "Weighted Round Robin (WRR) implementation, with fairer distribution.",
+  "main": "powrr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "dependencies": {
+    "primality": "1.6.1"
+  },
+  "repository": "https://github.com/leonardw/powrr.git",
+  "keywords": [
+    "Node.js",
+    "Weighted Round Robin",
+    "Round Robin"
+  ],
+  "author": "Leonard Wu",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
